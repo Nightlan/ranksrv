@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package pb;
+
+// 通用排行榜定义
+enum RANK_TYPE {
+    DEFAULT = 0;
+    PART    = 1;  // 限量排行榜
+    WHOLE   = 2;  // 全量排行榜
+}
+
+message RankInfo  {
+    string Name             = 1;            // 排行榜名字，每个排行榜唯一
+    RANK_TYPE Type          = 2;            // 排行榜类型
+    uint32 TopNum           = 3;            // top排行榜单数目，对于限量排行榜该值为限量大小
+    uint32 FlushInterval    = 4;            // 刷新间隔，数据刷新落地频率
+    uint64 ScoreMinLimit    = 5;            // 进入排行榜分数下限
+    uint32 ScoreNum         = 6;            // 参与排序的score数目
+}
+
+message RankUnitData {
+    string UniqueID               = 1;   // 唯一ID
+    repeated uint64 Score         = 2;   // 分数
+    uint32 UpdateTime             = 3;   // 更新时间
+}
+
+message UnitRankInfo {
+    uint32 Rank                   = 1;   // 当前排名
+    repeated uint64 Score         = 2;   // 当前分数
+}
+
+
+message RspHead {
+    uint32 RetCode = 1;
+}
+
+message RankInitReq{
+    RankInfo Info = 1;    // 注册的排行榜信息
+}
+
+message RankInitRsp{
+    RspHead Head   = 1;
+}
+
+message RankDataUpdateReq{
+    string Name             = 1;  // 排行榜名称
+    string UniqueID         = 2;  // 唯一ID
+    repeated uint64 Score   = 3;  // 分数
+}
+
+message RankDataUpdateRsp{
+    RspHead Head   = 1;
+}
+
+message RankQueryReq{
+    string Name             = 1;  // 排行榜名称
+    string UniqueID         = 2;  // 唯一ID
+}
+
+message RankQueryRsp{
+    RspHead Head       = 1;
+    UnitRankInfo RankInfo     = 2;
+}
+
+message RankTopQueryReq{
+    string Name             = 1;  // 排行榜名称
+    uint32 ReqNum           = 2;  // 请求的top数量
+}
+
+message RankTopQueryRsp{
+    RspHead Head       = 1;
+    repeated RankUnitData TopRank = 2;
+}
+
+message RankDataDeleteReq{
+    string Name             = 1;  // 排行榜名称
+    string UniqueID         = 2;  // 唯一ID
+}
+
+message RankDataDeleteRsp{
+    RspHead Head       = 1;
+}
+
+message RankCloseReq{
+    string Name = 1;    // 排行榜名称
+}
+
+message RankCloseRsp{
+    RspHead Head   = 1;
+}
+
+message RankQueryByScoreReq{
+    string Name             = 1;  // 排行榜名称
+    repeated uint64 Score   = 2;  // 分数
+}
+
+message RankQueryByScoreRsp{
+    RspHead Head       = 1;
+    uint32 Ranking     = 2;
+}
