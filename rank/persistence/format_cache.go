@@ -63,7 +63,7 @@ func (f *FormatCache) Read() (unitData []*pb.RankUnitData, err error) {
 		dataLen := int(binary.BigEndian.Uint32(buf[i:lenEnd]))
 		dataEnd := lenEnd + dataLen
 		data := &pb.RankUnitData{}
-		if err = data.XXX_Unmarshal(buf[lenEnd:dataEnd]); err != nil {
+		if err = proto.Unmarshal(buf[lenEnd:dataEnd], data); err != nil {
 			return
 		}
 		// 初始化索引

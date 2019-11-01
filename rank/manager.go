@@ -56,7 +56,7 @@ func (m *Manager) Start(httpPort string) (err error) {
 	}
 	for _, v := range data {
 		rankInfo := &pb.RankInfo{}
-		if err = rankInfo.XXX_Unmarshal(v); err != nil {
+		if err = proto.Unmarshal(v, rankInfo); err != nil {
 			return
 		}
 		if err = m.doRankInit(rankInfo); err != nil {
